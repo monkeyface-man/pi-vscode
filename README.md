@@ -1,5 +1,7 @@
 # pi-vscode
 
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/pi0.pi-vscode?label=VS%20Code%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=pi0.pi-vscode) [![Open VSX](https://img.shields.io/open-vsx/v/pi0/pi-vscode?label=Open%20VSX&color=purple)](https://open-vsx.org/extension/pi0/pi-vscode)
+
 Minimal VS Code extension for [pi coding agent](https://pi.dev/).
 
 ## Features
@@ -16,6 +18,18 @@ Minimal VS Code extension for [pi coding agent](https://pi.dev/).
 - `pi` CLI installed (`npm i -g @mariozechner/pi-coding-agent`)
 - An API key configured for at least one provider
 
+## Install
+
+Available on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=pi0.pi-vscode) and [Open VSX](https://open-vsx.org/extension/pi0/pi-vscode):
+
+```bash
+# VS Code / Cursor
+ext install pi0.pi-vscode
+
+# Open VSX (VSCodium, etc.)
+ovsx get pi0.pi-vscode
+```
+
 ## Commands
 
 | Command              | Keybinding                 | Description                       |
@@ -29,19 +43,3 @@ Minimal VS Code extension for [pi coding agent](https://pi.dev/).
 | Setting          | Default | Description                                             |
 | ---------------- | ------- | ------------------------------------------------------- |
 | `pi-vscode.path` | `""`    | Absolute path to the pi binary (auto-detected if empty) |
-
-## Development
-
-```bash
-pnpm install
-pnpm dev    # auto-rebuild on changes (watch mode)
-pnpm build  # production build
-# Press F5 in VS Code to launch Extension Development Host
-```
-
-## Packaging
-
-```bash
-pnpm package  # produces pi-vscode-0.0.1.vsix
-code --install-extension pi-vscode-0.0.1.vsix
-```
