@@ -1,8 +1,9 @@
 import { accessSync, constants } from "node:fs";
-import { execFile } from "node:child_process";
 import { join } from "node:path";
 import * as vscode from "vscode";
 import { createPackagesViewProvider } from "./packages.ts";
+
+const TERMINAL_TITLE = "PI Code";
 
 let extensionUri: vscode.Uri;
 
@@ -26,37 +27,58 @@ export function activate(context: vscode.ExtensionContext) {
     statusBarItem,
     vscode.commands.registerCommand("pi-vscode.open", async () => {
       const t = await createNewTerminal();
-      t?.show();
+      if (!t) return;
+      t.show();
     }),
     vscode.commands.registerCommand("pi-vscode.openWithFile", async () => {
       const editor = vscode.window.activeTextEditor;
-      const t = await createNewTerminal();
+      const args: string[] = [];
+      const parts: string[] = [];
+      const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+      if (workspaceRoot)
+        parts.push(
+          `The workspace root is: ${workspaceRoot}\nUse this as the working directory for file operations and commands.`,
+        );
+
+      if (editor) {
+        const doc = editor.document;
+        const fileName = doc.fileName;
+        const sel = editor.selection;
+
+        if (!sel.isEmpty) {
+          const startLine = sel.start.line + 1;
+          const endLine = sel.end.line + 1;
+          const selectedText = doc.getText(sel);
+          parts.push(
+            `The user is currently viewing ${fileName} (lines ${startLine}-${endLine}) in their editor:\n${selectedText}`,
+          );
+        } else {
+          parts.push(`The user is currently viewing this file in their editor: ${fileName}`);
+        }
+      }
+
+      if (parts.length > 0) {
+        args.push("--append-system-prompt", parts.join("\n\n"));
+      }
+      const t = await createNewTerminal(args);
       if (!t) return;
       t.show();
-      if (editor) {
-        const filePath = vscode.workspace.asRelativePath(editor.document.uri);
-        const sel = editor.selection;
-        const range = sel.isEmpty
-          ? `#L${sel.active.line + 1}`
-          : `#L${sel.start.line + 1}-${sel.end.line + 1}`;
-        const prompt = `In @${filePath}${range}`;
-        const sendPrompt = () => {
-          t.sendText("\x15", false);
-          t.sendText(prompt, false);
-        };
-        t.processId.then(() => sendPrompt());
-      }
     }),
     vscode.commands.registerCommand("pi-vscode.sendSelection", async () => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) return;
       const selection = editor.document.getText(editor.selection);
       if (selection) {
-        const t = await createNewTerminal();
+        const t = await createNewTerminal([selection]);
         if (!t) return;
-        t.sendText(selection);
         t.show();
       }
+    }),
+    vscode.commands.registerCommand("pi-vscode.openInNewWindow", async () => {
+      const t = await createNewTerminal();
+      if (!t) return;
+      t.show();
+      await vscode.commands.executeCommand("workbench.action.moveEditorToNewWindow");
     }),
     vscode.window.registerWebviewViewProvider(
       "pi-vscode.packages",
@@ -66,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
       provideTerminalProfile() {
         const cwd = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
         return new vscode.TerminalProfile({
-          name: "Pi",
+          name: TERMINAL_TITLE,
           shellPath: findPiBinary(),
           cwd,
           iconPath: {
@@ -79,7 +101,11 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-export function deactivate() {}
+export function deactivate() {
+  for (const terminal of vscode.window.terminals) {
+    if (terminal.name === TERMINAL_TITLE) terminal.dispose();
+  }
+}
 
 const chatHandler: vscode.ChatRequestHandler = async (request, _context, stream, _token) => {
   const message = request.prompt.trim();
@@ -88,14 +114,13 @@ const chatHandler: vscode.ChatRequestHandler = async (request, _context, stream,
     return;
   }
 
-  const t = await createNewTerminal();
+  const t = await createNewTerminal([message]);
   if (!t) {
     stream.markdown(
       "Pi is not installed. Please install it with `npm i -g @mariozechner/pi-coding-agent`.",
     );
     return;
   }
-  t.sendText(message);
   t.show();
 
   stream.markdown(
@@ -138,7 +163,7 @@ function findPiBinary(): string {
 function findPiColumn(): vscode.ViewColumn | undefined {
   for (const group of vscode.window.tabGroups.all) {
     for (const tab of group.tabs) {
-      if (tab.input instanceof vscode.TabInputTerminal && tab.label === "Pi") {
+      if (tab.input instanceof vscode.TabInputTerminal && tab.label === TERMINAL_TITLE) {
         return group.viewColumn;
       }
     }
@@ -160,13 +185,16 @@ function findUnusedColumn(): vscode.ViewColumn | undefined {
 
 let piExistsCache: boolean | undefined;
 
-async function createNewTerminal(): Promise<vscode.Terminal | undefined> {
+async function createNewTerminal(args?: string[]): Promise<vscode.Terminal | undefined> {
   const piPath = findPiBinary();
 
   if (piExistsCache === undefined) {
-    piExistsCache = await new Promise<boolean>((resolve) => {
-      execFile(piPath, ["--version"], (error) => resolve(!error));
-    });
+    try {
+      accessSync(piPath, constants.X_OK);
+      piExistsCache = true;
+    } catch {
+      piExistsCache = false;
+    }
   }
 
   if (!piExistsCache) {
@@ -194,15 +222,15 @@ async function createNewTerminal(): Promise<vscode.Terminal | undefined> {
   const viewColumn = findPiColumn() ?? findUnusedColumn() ?? vscode.ViewColumn.Beside;
 
   const terminal = vscode.window.createTerminal({
-    name: "Pi",
+    name: TERMINAL_TITLE,
     shellPath: piPath,
+    shellArgs: args && args.length > 0 ? args : undefined,
+    location: { viewColumn },
+    isTransient: true,
     cwd,
     iconPath: {
       light: vscode.Uri.joinPath(extensionUri, "assets", "logo-light.svg"),
       dark: vscode.Uri.joinPath(extensionUri, "assets", "logo.svg"),
-    },
-    location: {
-      viewColumn,
     },
   });
 

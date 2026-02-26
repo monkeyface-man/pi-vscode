@@ -19,6 +19,7 @@
     "build": "rolldown -c rolldown.config.ts",
     "dev": "rolldown -c rolldown.config.ts -w",
     "package": "pnpm build && pnpx @vscode/vsce package --no-dependencies",
+    "install-local": "pnpm package && code --install-extension *.vsix",
     "release": "node scripts/release.ts",
     "fmt": "oxlint . --fix && oxfmt .",
     "lint": "oxlint . && oxfmt --check .",
@@ -75,10 +76,24 @@
       {
         "command": "pi-vscode.sendSelection",
         "title": "Pi: Send Selection"
+      },
+      {
+        "command": "pi-vscode.openInNewWindow",
+        "title": "Pi: Open in New Window",
+        "icon": {
+          "light": "assets/logo-light.svg",
+          "dark": "assets/logo.svg"
+        }
       }
     ],
     "menus": {
       "editor/title": [
+        {
+          "command": "pi-vscode.openWithFile",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
         {
           "command": "pi-vscode.openWithFile",
           "group": "navigation"
