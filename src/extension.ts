@@ -1,4 +1,5 @@
 import { accessSync, constants } from "node:fs";
+import { execFile } from "node:child_process";
 import { join } from "node:path";
 import * as vscode from "vscode";
 import { createPackagesViewProvider } from "./packages.ts";
@@ -23,13 +24,14 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     participant,
     statusBarItem,
-    vscode.commands.registerCommand("pi-vscode.open", () => {
-      const t = createNewTerminal();
-      t.show();
+    vscode.commands.registerCommand("pi-vscode.open", async () => {
+      const t = await createNewTerminal();
+      t?.show();
     }),
-    vscode.commands.registerCommand("pi-vscode.openWithFile", () => {
+    vscode.commands.registerCommand("pi-vscode.openWithFile", async () => {
       const editor = vscode.window.activeTextEditor;
-      const t = createNewTerminal();
+      const t = await createNewTerminal();
+      if (!t) return;
       t.show();
       if (editor) {
         const filePath = vscode.workspace.asRelativePath(editor.document.uri);
@@ -45,12 +47,13 @@ export function activate(context: vscode.ExtensionContext) {
         t.processId.then(() => sendPrompt());
       }
     }),
-    vscode.commands.registerCommand("pi-vscode.sendSelection", () => {
+    vscode.commands.registerCommand("pi-vscode.sendSelection", async () => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) return;
       const selection = editor.document.getText(editor.selection);
       if (selection) {
-        const t = createNewTerminal();
+        const t = await createNewTerminal();
+        if (!t) return;
         t.sendText(selection);
         t.show();
       }
@@ -85,7 +88,11 @@ const chatHandler: vscode.ChatRequestHandler = async (request, _context, stream,
     return;
   }
 
-  const t = createNewTerminal();
+  const t = await createNewTerminal();
+  if (!t) {
+    stream.markdown("Pi is not installed. Please install it with `npm i -g @mariozechner/pi-coding-agent`.");
+    return;
+  }
   t.sendText(message);
   t.show();
 
@@ -125,12 +132,41 @@ function findPiBinary(): string {
   return "pi";
 }
 
-function createNewTerminal(): vscode.Terminal {
+let piExistsCache: boolean | undefined;
+
+async function createNewTerminal(): Promise<vscode.Terminal | undefined> {
+  const piPath = findPiBinary();
+
+  if (piExistsCache === undefined) {
+    piExistsCache = await new Promise<boolean>((resolve) => {
+      execFile(piPath, ["--version"], (error) => resolve(!error));
+    });
+  }
+
+  if (!piExistsCache) {
+    const commands: Record<string, string> = {
+      "npm": "npm i -g @mariozechner/pi-coding-agent",
+      "bun": "bun i -g @mariozechner/pi-coding-agent",
+      "pnpm": "pnpm i -g @mariozechner/pi-coding-agent",
+    };
+    const action = await vscode.window.showErrorMessage(
+      "Pi binary not found. Install it globally?",
+      ...Object.keys(commands),
+    );
+    if (action) {
+      piExistsCache = undefined;
+      const t = vscode.window.createTerminal({ name: "Install Pi" });
+      t.show();
+      t.sendText(commands[action]);
+    }
+    return undefined;
+  }
+
   const cwd = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
 
-  const terminal = vscode.window.createTerminal({
+  return vscode.window.createTerminal({
     name: "Pi",
-    shellPath: findPiBinary(),
+    shellPath: piPath,
     cwd,
     iconPath: {
       light: vscode.Uri.joinPath(extensionUri, "assets", "logo-light.svg"),
@@ -140,6 +176,4 @@ function createNewTerminal(): vscode.Terminal {
       viewColumn: vscode.ViewColumn.Beside,
     },
   });
-
-  return terminal;
 }
